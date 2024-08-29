@@ -17,7 +17,6 @@ if __name__ == '__main__':
         print()
         if opcao == 0:
             print('Obrigado por usar o gerenciador de loja de varejo da FIAP.')
-            breakpoint()
         elif opcao == 1:
             nome = input('Informe o nome do produto: ')
             categoria = input('Informe a categoria do produto: ')
@@ -31,8 +30,23 @@ if __name__ == '__main__':
 
             print(f'\nProduto#{produto.codigo} criado com sucesso!')
         elif opcao == 2:
-            codigo_produto = int(input('Informe o código do produto: '))
+            produtos_criados = repositorio.listar()
+
+            if len(produtos_criados) == 0:
+                print('Não há produtos criados.')
+                continue
+
+            print('Produtos existentes:\n')
+            for produto in produtos_criados:
+                print(f'{produto.codigo} - {produto.nome}')
+
+            codigo_produto = int(input('\nInforme o código do produto: '))
             produto = repositorio.obtenha(codigo_produto)
+
+            if not produto:
+                print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
+                continue
+
             # TODO: adicionar validacão de input inválido
             quantidade = int(input('Informe a quantidade a ser adicionada ao estoque: '))
 

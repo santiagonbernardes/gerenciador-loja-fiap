@@ -27,6 +27,9 @@ class Repositorio:
                 return produto
         return None
 
+    def listar(self):
+        return self.produtos
+
 
 class GeradorDeCodigo:
     def __init__(self):
