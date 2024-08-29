@@ -51,3 +51,15 @@ class Estoque:
             self.produtos_estocados[codigo_produto] += quantidade
         else:
             self.produtos_estocados[codigo_produto] = quantidade
+
+    def quantidade_estocada(self, produto):
+        return self.produtos_estocados.get(produto.codigo, 0)
+
+    def remover(self, produto, quantidade):
+        codigo_produto = produto.codigo
+        if codigo_produto in self.produtos_estocados:
+            # TODO: lancar excecao caso a quantidade a ser removida seja maior que a quantidade em estoque
+            self.produtos_estocados[codigo_produto] -= quantidade
+        else:
+            # TODO: deve lancar excecao
+            print(f'Produto#{produto.codigo} não está no estoque.')
