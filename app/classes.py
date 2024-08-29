@@ -21,6 +21,13 @@ class Repositorio:
         produto.codigo = self.gerador_de_codigo.gerar()
         self.produtos.append(produto)
 
+    def obtenha(self, codigo):
+        for produto in self.produtos:
+            if produto.codigo == codigo:
+                return produto
+        return None
+
+
 class GeradorDeCodigo:
     def __init__(self):
         self.codigo = 0
@@ -28,3 +35,16 @@ class GeradorDeCodigo:
     def gerar(self):
         self.codigo += 1
         return self.codigo
+
+
+class Estoque:
+    def __init__(self):
+        self.produtos_estocados = {}
+
+    def adicionar(self, produto, quantidade):
+        # TODO: Adicionar validacão para quantidade negativa.
+        codigo_produto = produto.codigo
+        if codigo_produto in self.produtos_estocados:
+            self.produtos_estocados[codigo_produto] += quantidade
+        else:
+            self.produtos_estocados[codigo_produto] = quantidade
