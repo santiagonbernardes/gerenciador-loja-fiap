@@ -13,6 +13,7 @@ if __name__ == '__main__':
         print('2 - Aumentar a quantidade de um produto no estoque')
         print('3 - Remover uma quantidade de um produto do estoque')
         print('4 - Ajustar manualmente a quantidade de um produto no estoque')
+        print(f'5 - Alterar alerta de estoque baixo (valor atual: {estoque.limite_estoque_baixo})')
         print('0 - Sair')
         # TODO: adicionar exceção para caso o usuário digite um valor que não seja um número
         opcao = int(input('Escolha uma opção: '))
@@ -131,3 +132,11 @@ if __name__ == '__main__':
             print(
                 f'\nQuantidade do produto#{produto.codigo} atualizada de {quantidade_estocada} para {nova_quantidade}.'
             )
+        elif opcao == 5:
+            # Alterar alerta de estoque baixo
+            alerta_original = estoque.limite_estoque_baixo
+            print(f'O valor atual do alerta de estoque baixo é {alerta_original}.')
+            # TODO: validacão do valor e validacao do input. Talvez mover para um método?
+            novo_alerta = int(input('Informe o novo valor do alerta de estoque baixo: '))
+            estoque.limite_estoque_baixo = novo_alerta
+            print(f'Alerta de estoque baixo alterado de {alerta_original} para {novo_alerta}.')

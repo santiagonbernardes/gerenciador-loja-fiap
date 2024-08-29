@@ -41,8 +41,9 @@ class GeradorDeCodigo:
 
 
 class Estoque:
-    def __init__(self):
+    def __init__(self, limite_estoque_baixo=3):
         self.produtos_estocados = {}
+        self.limite_estoque_baixo = limite_estoque_baixo
 
     def adicionar(self, produto, quantidade):
         # TODO: Adicionar validacão para quantidade negativa.
@@ -60,6 +61,8 @@ class Estoque:
         if codigo_produto in self.produtos_estocados:
             # TODO: lancar excecao caso a quantidade a ser removida seja maior que a quantidade em estoque ou negativo
             self.produtos_estocados[codigo_produto] -= quantidade
+            if self.produtos_estocados[codigo_produto] < self.limite_estoque_baixo:
+                print(f'Atenção: o produto#{codigo_produto} está com estoque baixo.')
         else:
             # TODO: deve lancar excecao
             print(f'Produto#{produto.codigo} não está no estoque.')
@@ -69,6 +72,9 @@ class Estoque:
         if codigo_produto in self.produtos_estocados:
             # TODO: lancar excecao se quantidade for negativa
             self.produtos_estocados[codigo_produto] = nova_quantidade
+
+            if self.produtos_estocados[codigo_produto] < self.limite_estoque_baixo:
+                print(f'Atenção: o produto#{codigo_produto} está com estoque menor que {self.limite_estoque_baixo}.')
         else:
             # TODO: deve lancar excecao
             print(f'Produto#{produto.codigo} não está no estoque.')
