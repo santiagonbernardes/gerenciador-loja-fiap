@@ -1,4 +1,6 @@
-from app.classes import Produto
+from app.classes import Produto, Repositorio, GeradorDeCodigo
+
+repositorio = Repositorio(GeradorDeCodigo())
 
 if __name__ == '__main__':
     opcao = -1
@@ -19,6 +21,8 @@ if __name__ == '__main__':
             preco = float(input('Informe o preço do produto: '))
             descricao = input('Informe a descrição do produto: ')
             fornecedor = input('Informe o fornecedor do produto: ')
-            produto = Produto(nome, categoria, preco, descricao, fornecedor)
 
-            print('\nProduto criado com sucesso!')
+            produto = Produto(nome, categoria, preco, descricao, fornecedor)
+            repositorio.adicionar(produto)
+
+            print(f'\nProduto#{produto.codigo} criado com sucesso!')
