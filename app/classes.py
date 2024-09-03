@@ -1,3 +1,6 @@
+from app.excecoes import NaoHaProdutosException
+
+
 class Produto:
 
     def __init__(self, nome, categoria, preco, descricao, fornecedor):
@@ -147,6 +150,20 @@ class ConversorDeInputStringObrigatoria(ConversorDeInput):
             raise Exception('String é obrigatória')
 
         return str(entrada_do_usuario)
+
+
+class ExibidorDeProdutos:
+    def __init__(self, repositorio):
+        self.repositorio = repositorio
+
+    def exiba_todos(self):
+        produtos = self.repositorio.listar()
+
+        if len(produtos) == 0:
+            raise NaoHaProdutosException()
+
+        for produto in produtos:
+            print(f'{produto.codigo} - {produto.nome}')
 
 
 conversores = {
