@@ -138,9 +138,21 @@ class ConversorDeInputFloatPositivo(ConversorDeInput):
         return valor_convertido
 
 
+class ConversorDeInputStringObrigatoria(ConversorDeInput):
+    def __init__(self, texto_ao_usuario):
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        if entrada_do_usuario is None or entrada_do_usuario.strip() == '':
+            raise Exception('String é obrigatória')
+
+        return str(entrada_do_usuario)
+
+
 conversores = {
     'int': ConversorDeInputInt,
     'float': ConversorDeInputFloat,
     'int_pos': ConversorDeInputIntPositivo,
-    'float_pos': ConversorDeInputFloatPositivo
+    'float_pos': ConversorDeInputFloatPositivo,
+    'str_obg': ConversorDeInputStringObrigatoria
 }

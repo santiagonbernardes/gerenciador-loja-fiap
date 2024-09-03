@@ -22,11 +22,11 @@ if __name__ == '__main__':
             print('Obrigado por usar o gerenciador de loja de varejo da FIAP.')
         elif opcao == 1:
             # Criar produto
-            nome = input('Informe o nome do produto: ')
-            categoria = input('Informe a categoria do produto: ')
+            nome = conversores['str_obg']('Informe o nome do produto: ').converta()
+            categoria = conversores['str_obg']('Informe a categoria do produto: ').converta()
             preco = conversores['float_pos']('Informe o preço do produto: ').converta()
-            descricao = input('Informe a descrição do produto: ')
-            fornecedor = input('Informe o fornecedor do produto: ')
+            descricao = conversores['str_obg']('Informe a descrição do produto: ').converta()
+            fornecedor = conversores['str_obg']('Informe o fornecedor do produto: ').converta()
 
             produto = Produto(nome, categoria, preco, descricao, fornecedor)
             repositorio.adicionar(produto)
