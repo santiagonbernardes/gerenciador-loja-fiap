@@ -24,7 +24,7 @@ if __name__ == '__main__':
             # Criar produto
             nome = input('Informe o nome do produto: ')
             categoria = input('Informe a categoria do produto: ')
-            preco = conversores['float']('Informe o preço do produto: ').converta()
+            preco = conversores['float_pos']('Informe o preço do produto: ').converta()
             descricao = input('Informe a descrição do produto: ')
             fornecedor = input('Informe o fornecedor do produto: ')
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            quantidade = conversores['int']('Informe a quantidade a ser adicionada ao estoque: ').converta()
+            quantidade = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
 
             estoque.adicionar(produto, quantidade)
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            quantidade_remover = conversores['int']('Informe a quantidade a ser removida do estoque: ').converta()
+            quantidade_remover = conversores['int_pos']('Informe a quantidade a ser removida do estoque: ').converta()
 
             estoque.remover(produto, quantidade_remover)
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            nova_quantidade = conversores['int']('Informe a nova quantidade do produto no estoque: ').converta()
+            nova_quantidade = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
 
             estoque.atualizar(produto, nova_quantidade)
 
@@ -127,7 +127,7 @@ if __name__ == '__main__':
             # Alterar alerta de estoque baixo
             alerta_original = estoque.limite_estoque_baixo
             print(f'O valor atual do alerta de estoque baixo é {alerta_original}.')
-            novo_alerta = conversores['int']('Informe o novo valor do alerta de estoque baixo: ').converta()
+            novo_alerta = conversores['int_pos']('Informe o novo valor do alerta de estoque baixo: ').converta()
             estoque.limite_estoque_baixo = novo_alerta
             print(f'Alerta de estoque baixo alterado de {alerta_original} para {novo_alerta}.')
         else:

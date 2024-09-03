@@ -114,7 +114,33 @@ class ConversorDeInputInt(ConversorDeInput):
         return int(entrada_do_usuario)
 
 
+class ConversorDeInputIntPositivo(ConversorDeInputInt):
+    def __init__(self, texto_ao_usuario):
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        valor_convertido = int(entrada_do_usuario)
+        if valor_convertido < 1:
+            raise Exception('Valor não é positivo')
+
+        return valor_convertido
+
+
+class ConversorDeInputFloatPositivo(ConversorDeInput):
+    def __init__(self, texto_ao_usuario):
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        valor_convertido = float(entrada_do_usuario)
+        if valor_convertido < 1:
+            raise Exception('Valor não é positivo')
+
+        return valor_convertido
+
+
 conversores = {
     'int': ConversorDeInputInt,
-    'float': ConversorDeInputFloat
+    'float': ConversorDeInputFloat,
+    'int_pos': ConversorDeInputIntPositivo,
+    'float_pos': ConversorDeInputFloatPositivo
 }
