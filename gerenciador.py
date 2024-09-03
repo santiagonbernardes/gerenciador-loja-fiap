@@ -5,6 +5,26 @@ repositorio = Repositorio(GeradorDeCodigo())
 estoque = Estoque()
 exibidor = ExibidorDeProdutos(repositorio)
 
+
+def obtenha_produto(repositorio, estoque, exibidor):
+    produto = None
+
+    while not produto:
+        exibidor.exiba_todos()
+
+        codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
+        produto = repositorio.obtenha(codigo_produto)
+
+        if not produto:
+            print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
+
+    quantidade_estocada = estoque.quantidade_estocada(produto)
+
+    print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
+
+    return produto
+
+
 if __name__ == '__main__':
     opcao = -1
     print('Bem vindo ao gerenciador de loja de varejo da FIAP.\n')
@@ -37,18 +57,7 @@ if __name__ == '__main__':
                 print(f'\nProduto#{produto.codigo} criado com sucesso!')
             elif opcao == 2:
                 # Adicionar produtos ao estoque
-                exibidor.exiba_todos()
-
-                codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
-                produto = repositorio.obtenha(codigo_produto)
-
-                if not produto:
-                    print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
-                    continue
-
-                quantidade_estocada = estoque.quantidade_estocada(produto)
-
-                print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
+                produto = obtenha_produto(repositorio, estoque, exibidor)
 
                 quantidade = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
 
@@ -83,18 +92,7 @@ if __name__ == '__main__':
                 print(f'\nQuantidade de {quantidade_remover} removida do estoque do produto#{codigo_produto}.')
             elif opcao == 4:
                 # Ajustar manualmente a quantidade de um produto no estoque
-                exibidor.exiba_todos()
-
-                codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
-                produto = repositorio.obtenha(codigo_produto)
-
-                if not produto:
-                    print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
-                    continue
-
-                quantidade_estocada = estoque.quantidade_estocada(produto)
-
-                print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
+                produto = obtenha_produto(repositorio, estoque, exibidor)
 
                 nova_quantidade = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
 
