@@ -1,4 +1,4 @@
-from app.classes import Produto, Repositorio, GeradorDeCodigo, Estoque
+from app.classes import Produto, Repositorio, GeradorDeCodigo, Estoque, conversores
 
 repositorio = Repositorio(GeradorDeCodigo())
 estoque = Estoque()
@@ -15,8 +15,7 @@ if __name__ == '__main__':
         print('4 - Ajustar manualmente a quantidade de um produto no estoque')
         print(f'5 - Alterar alerta de estoque baixo (valor atual: {estoque.limite_estoque_baixo})')
         print('0 - Sair')
-        # TODO: adicionar exceção para caso o usuário digite um valor que não seja um número
-        opcao = int(input('Escolha uma opção: '))
+        opcao = conversores['int']('Escolha uma opção: ').converta()
         print()
         if opcao == 0:
             # Sair
@@ -25,8 +24,7 @@ if __name__ == '__main__':
             # Criar produto
             nome = input('Informe o nome do produto: ')
             categoria = input('Informe a categoria do produto: ')
-            # TODO: adicionar tratamento de excecão para o preco
-            preco = float(input('Informe o preço do produto: '))
+            preco = conversores['float']('Informe o preço do produto: ').converta()
             descricao = input('Informe a descrição do produto: ')
             fornecedor = input('Informe o fornecedor do produto: ')
 
@@ -46,7 +44,7 @@ if __name__ == '__main__':
             for produto in produtos_criados:
                 print(f'{produto.codigo} - {produto.nome}')
 
-            codigo_produto = int(input('\nInforme o código do produto: '))
+            codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
             produto = repositorio.obtenha(codigo_produto)
 
             if not produto:
@@ -57,8 +55,7 @@ if __name__ == '__main__':
 
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            # TODO: adicionar validacão de input inválido
-            quantidade = int(input('Informe a quantidade a ser adicionada ao estoque: '))
+            quantidade = conversores['int']('Informe a quantidade a ser adicionada ao estoque: ').converta()
 
             estoque.adicionar(produto, quantidade)
 
@@ -75,7 +72,7 @@ if __name__ == '__main__':
             for produto in produtos_criados:
                 print(f'{produto.codigo} - {produto.nome}')
 
-            codigo_produto = int(input('\nInforme o código do produto: '))
+            codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
             produto = repositorio.obtenha(codigo_produto)
 
             if not produto:
@@ -90,8 +87,7 @@ if __name__ == '__main__':
 
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            # TODO: adicionar validacão de input inválido
-            quantidade_remover = int(input('Informe a quantidade a ser removida do estoque: '))
+            quantidade_remover = conversores['int']('Informe a quantidade a ser removida do estoque: ').converta()
 
             estoque.remover(produto, quantidade_remover)
 
@@ -109,7 +105,7 @@ if __name__ == '__main__':
             for produto in produtos_criados:
                 print(f'{produto.codigo} - {produto.nome}')
 
-            codigo_produto = int(input('\nInforme o código do produto: '))
+            codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
             produto = repositorio.obtenha(codigo_produto)
 
             if not produto:
@@ -118,14 +114,9 @@ if __name__ == '__main__':
 
             quantidade_estocada = estoque.quantidade_estocada(produto)
 
-            if quantidade_estocada == 0:
-                print(f'O produto#{produto.codigo} não possui unidades em estoque.')
-                continue
-
             print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
-            # TODO: adicionar validacão de input inválido
-            nova_quantidade = int(input('Informe a nova quantidade do produto no estoque: '))
+            nova_quantidade = conversores['int']('Informe a nova quantidade do produto no estoque: ').converta()
 
             estoque.atualizar(produto, nova_quantidade)
 
@@ -136,7 +127,8 @@ if __name__ == '__main__':
             # Alterar alerta de estoque baixo
             alerta_original = estoque.limite_estoque_baixo
             print(f'O valor atual do alerta de estoque baixo é {alerta_original}.')
-            # TODO: validacão do valor e validacao do input. Talvez mover para um método?
-            novo_alerta = int(input('Informe o novo valor do alerta de estoque baixo: '))
+            novo_alerta = conversores['int']('Informe o novo valor do alerta de estoque baixo: ').converta()
             estoque.limite_estoque_baixo = novo_alerta
             print(f'Alerta de estoque baixo alterado de {alerta_original} para {novo_alerta}.')
+        else:
+            print(f'Opção {opcao} inválida.')

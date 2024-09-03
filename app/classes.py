@@ -78,3 +78,43 @@ class Estoque:
         else:
             # TODO: deve lancar excecao
             print(f'Produto#{produto.codigo} não está no estoque.')
+
+
+class ConversorDeInput:
+    def __init__(self, texto_ao_usuario):
+        self.texto_ao_usuario = texto_ao_usuario
+
+    def converta(self):
+        while True:
+            try:
+                entrada_do_usuario = input(self.texto_ao_usuario)
+                return self.converta_para_o_tipo(entrada_do_usuario)
+            except NotImplementedError as erro:
+                raise erro
+            except Exception:
+                print('O dado que você digitou não é válido.')
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        raise NotImplementedError('Você está chamando a classe errada, corrija seu código')
+
+
+class ConversorDeInputFloat(ConversorDeInput):
+    def __init__(self, texto_ao_usuario):
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        return float(entrada_do_usuario)
+
+
+class ConversorDeInputInt(ConversorDeInput):
+    def __init__(self, texto_ao_usuario):
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario):
+        return int(entrada_do_usuario)
+
+
+conversores = {
+    'int': ConversorDeInputInt,
+    'float': ConversorDeInputFloat
+}
