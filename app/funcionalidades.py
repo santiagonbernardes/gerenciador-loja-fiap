@@ -3,10 +3,10 @@ from app.classes.estoque import Estoque
 from app.classes.exibidor_de_produtos import ExibidorDeProdutos
 from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.produto import Produto
-from app.classes.repositorio import Repositorio
+from app.classes.repositorio import RepositorioEmMemoria
 from app.excecoes import ProdutoSemEstoqueException
 
-repositorio = Repositorio(GeradorDeCodigo())
+repositorio = RepositorioEmMemoria(GeradorDeCodigo())
 estoque = Estoque()
 exibidor = ExibidorDeProdutos(repositorio)
 
