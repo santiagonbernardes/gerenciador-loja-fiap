@@ -86,5 +86,5 @@ def altere_alerta_estoque():
     alerta_original = estoque.limite_estoque_baixo
     print(f'O valor atual do alerta de estoque baixo é {alerta_original}.')
     novo_alerta = conversores['int_pos']('Informe o novo valor do alerta de estoque baixo: ').converta()
-    estoque.limite_estoque_baixo = novo_alerta
+    estoque.atualize_limite_estoque_baixo(novo_alerta)
     print(f'Alerta de estoque baixo alterado de {alerta_original} para {novo_alerta}.')
