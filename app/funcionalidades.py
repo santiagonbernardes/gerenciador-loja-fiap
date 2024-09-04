@@ -56,6 +56,7 @@ def crie_produto():
 
     produto = Produto(nome, categoria, preco, descricao, fornecedor)
     repositorio.adicionar(produto)
+    estoque.adicionar(produto, 0)
 
     print(f'\nProduto#{produto.codigo} criado com sucesso!')
 

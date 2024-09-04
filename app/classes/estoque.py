@@ -1,4 +1,4 @@
-from app.excecoes import ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException
+from app.excecoes import ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, ProdutoNaoEstocadoException
 
 
 class Estoque:
@@ -17,7 +17,9 @@ class Estoque:
         self.execute_observando_limite_estoque_baixo(self.execute_atualizar, produto, nova_quantidade)
 
     def quantidade_estocada(self, produto):
-        return self.produtos_estocados.get(produto.codigo, 0)
+        if produto.codigo not in self.produtos_estocados:
+            raise ProdutoNaoEstocadoException()
+        return self.produtos_estocados[produto.codigo]
 
     def atualize_limite_estoque_baixo(self, novo_limite):
         self.limite_estoque_baixo = novo_limite

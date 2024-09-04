@@ -1,4 +1,5 @@
-from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException
+from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, \
+    ProdutoNaoEstocadoException
 from app.funcionalidades import crie_produto, adicione_ao_estoque, remova_do_estoque, ajuste_estoque_manualmente, \
     altere_alerta_estoque, obtenha_opcao_do_menu
 
@@ -34,3 +35,5 @@ if __name__ == '__main__':
             print('Produto sem unidades em estoque.')
         except RemocaoMaiorQueEstoqueException:
             print('Quantidade a remover maior que a quantidade em estoque.')
+        except ProdutoNaoEstocadoException:
+            print('Você tentou acessar o estoque de um produto que não está estocado. Adicione o produto ao estoque.')
