@@ -1,5 +1,5 @@
 from app.classes import Produto, Repositorio, GeradorDeCodigo, Estoque, conversores, ExibidorDeProdutos
-from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException
+from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException
 
 repositorio = Repositorio(GeradorDeCodigo())
 estoque = Estoque()
@@ -7,25 +7,25 @@ exibidor = ExibidorDeProdutos(repositorio)
 
 
 def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False):
-    produto = None
+    produto_encontrado = None
 
-    while not produto:
+    while not produto_encontrado:
         exibidor.exiba_todos()
 
         codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
-        produto = repositorio.obtenha(codigo_produto)
+        produto_encontrado = repositorio.obtenha(codigo_produto)
 
-        if not produto:
+        if not produto_encontrado:
             print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
 
-    quantidade_estocada = estoque.quantidade_estocada(produto)
+    quantidade_estocada = estoque.quantidade_estocada(produto_encontrado)
 
     if erro_estoque_vazio and quantidade_estocada == 0:
         raise ProdutoSemEstoqueException()
 
-    print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
+    print(f'O produto {produto_encontrado.nome} possui {quantidade_estocada} unidades em estoque.')
 
-    return produto
+    return produto_encontrado
 
 
 if __name__ == '__main__':
@@ -70,7 +70,6 @@ if __name__ == '__main__':
                 quantidade_remover = conversores['int_pos'](
                     'Informe a quantidade a ser removida do estoque: ').converta()
                 estoque.remover(produto, quantidade_remover)
-                # TODO: tratar excecao de remoćão aqui
                 print(f'\nQuantidade de {quantidade_remover} removida do estoque do produto#{produto.codigo}.')
             elif opcao == 4:
                 # Ajustar manualmente a quantidade de um produto no estoque
@@ -91,3 +90,5 @@ if __name__ == '__main__':
             print('Não há produtos criados.')
         except ProdutoSemEstoqueException:
             print('Produto sem unidades em estoque.')
+        except RemocaoMaiorQueEstoqueException:
+            print('Quantidade a remover maior que a quantidade em estoque.')

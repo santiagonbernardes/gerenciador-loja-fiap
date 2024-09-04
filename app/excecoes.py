@@ -4,3 +4,7 @@ class NaoHaProdutosException(Exception):
 
 class ProdutoSemEstoqueException(Exception):
     pass
+
+
+class RemocaoMaiorQueEstoqueException(Exception):
+    pass
