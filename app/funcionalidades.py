@@ -8,7 +8,7 @@ from app.excecoes import ProdutoSemEstoqueException
 
 repositorio = RepositorioEmMemoria(GeradorDeCodigo())
 estoque = Estoque()
-exibidor = ExibidorDeProdutos(repositorio)
+exibidor = ExibidorDeProdutos(repositorio, estoque)
 
 
 def obtenha_opcao_do_menu():
