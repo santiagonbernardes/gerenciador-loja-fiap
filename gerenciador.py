@@ -1,12 +1,12 @@
 from app.classes import Produto, Repositorio, GeradorDeCodigo, Estoque, conversores, ExibidorDeProdutos
-from app.excecoes import NaoHaProdutosException
+from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException
 
 repositorio = Repositorio(GeradorDeCodigo())
 estoque = Estoque()
 exibidor = ExibidorDeProdutos(repositorio)
 
 
-def obtenha_produto(repositorio, estoque, exibidor):
+def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False):
     produto = None
 
     while not produto:
@@ -19,6 +19,9 @@ def obtenha_produto(repositorio, estoque, exibidor):
             print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
 
     quantidade_estocada = estoque.quantidade_estocada(produto)
+
+    if erro_estoque_vazio and quantidade_estocada == 0:
+        raise ProdutoSemEstoqueException()
 
     print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
 
@@ -58,49 +61,23 @@ if __name__ == '__main__':
             elif opcao == 2:
                 # Adicionar produtos ao estoque
                 produto = obtenha_produto(repositorio, estoque, exibidor)
-
                 quantidade = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
-
                 estoque.adicionar(produto, quantidade)
-
-                print(f'\nQuantidade de {quantidade} adicionada ao estoque do produto#{codigo_produto}.')
+                print(f'\nQuantidade de {quantidade} adicionada ao estoque do produto#{produto.codigo}.')
             elif opcao == 3:
                 # Remover itens do estoque
-                exibidor.exiba_todos()
-
-                codigo_produto = conversores['int']('\nInforme o código do produto: ').converta()
-                produto = repositorio.obtenha(codigo_produto)
-
-                if not produto:
-                    print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
-                    continue
-
-                quantidade_estocada = estoque.quantidade_estocada(produto)
-
-                if quantidade_estocada == 0:
-                    print(f'O produto#{produto.codigo} não possui unidades em estoque.')
-                    continue
-
-                print(f'O produto {produto.nome} possui {quantidade_estocada} unidades em estoque.')
-
+                produto = obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=True)
                 quantidade_remover = conversores['int_pos'](
                     'Informe a quantidade a ser removida do estoque: ').converta()
-
                 estoque.remover(produto, quantidade_remover)
-
                 # TODO: tratar excecao de remoćão aqui
-                print(f'\nQuantidade de {quantidade_remover} removida do estoque do produto#{codigo_produto}.')
+                print(f'\nQuantidade de {quantidade_remover} removida do estoque do produto#{produto.codigo}.')
             elif opcao == 4:
                 # Ajustar manualmente a quantidade de um produto no estoque
                 produto = obtenha_produto(repositorio, estoque, exibidor)
-
                 nova_quantidade = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
-
                 estoque.atualizar(produto, nova_quantidade)
-
-                print(
-                    f'\nQuantidade do produto#{produto.codigo} atualizada de {quantidade_estocada} para {nova_quantidade}.'
-                )
+                print(f'\nQuantidade do produto#{produto.codigo} atualizada para {nova_quantidade}.')
             elif opcao == 5:
                 # Alterar alerta de estoque baixo
                 alerta_original = estoque.limite_estoque_baixo
@@ -112,3 +89,5 @@ if __name__ == '__main__':
                 print(f'Opção {opcao} inválida.')
         except NaoHaProdutosException:
             print('Não há produtos criados.')
+        except ProdutoSemEstoqueException:
+            print('Produto sem unidades em estoque.')
