@@ -8,3 +8,7 @@ class ProdutoSemEstoqueException(Exception):
 
 class RemocaoMaiorQueEstoqueException(Exception):
     pass
+
+
+class ProdutoNaoEstocadoException(Exception):
+    pass
