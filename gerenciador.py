@@ -1,4 +1,9 @@
-from app.classes import Produto, Repositorio, GeradorDeCodigo, Estoque, conversores, ExibidorDeProdutos
+from app.classes.conversor_de_input import conversores
+from app.classes.estoque import Estoque
+from app.classes.exibidor_de_produtos import ExibidorDeProdutos
+from app.classes.gerador_de_codigo import GeradorDeCodigo
+from app.classes.produto import Produto
+from app.classes.repositorio import Repositorio
 from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException
 
 repositorio = Repositorio(GeradorDeCodigo())
