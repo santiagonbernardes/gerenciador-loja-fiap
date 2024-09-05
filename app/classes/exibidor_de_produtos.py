@@ -16,4 +16,4 @@ class ExibidorDeProdutos:
         print('Código - Nome - Quantidade em estoque\n')
 
         for produto in produtos:
-            print(f'{produto.codigo} - {produto.nome} - {self.estoque.quantidade_estocada(produto)}')
+            print(f'{produto.codigo} - {produto.nome} - {self.estoque.obtenha_quantidade_estocada(produto)}')

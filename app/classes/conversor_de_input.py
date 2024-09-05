@@ -12,7 +12,9 @@ class ConversorDeInput:
             except Exception:
                 print('O dado que você digitou não é válido.')
 
+    # Daqui pra baixo, tudo deveria ser privado ou protegido
     def converta_para_o_tipo(self, entrada_do_usuario):
+        # Este método deve ser implementado pelas classes filhas para que o método converta funcione
         raise NotImplementedError('Você está chamando a classe errada, corrija seu código')
 
 
@@ -67,6 +69,7 @@ class ConversorDeInputStringObrigatoria(ConversorDeInput):
         return str(entrada_do_usuario)
 
 
+# Conversores é uma "factory" (padrão de projeto) de conversores de input
 conversores = {
     'int': ConversorDeInputInt,
     'float': ConversorDeInputFloat,

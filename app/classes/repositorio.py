@@ -12,6 +12,7 @@ class Repositorio:
     def listar(self):
         raise NotImplementedError('Você está chamando a super classe, corrija seu código')
 
+    # Daqui pra baixo, tudo deveria ser privado ou protegido
     def salve(self, produto):
         raise NotImplementedError('Você está chamando a super classe, corrija seu código')
 
