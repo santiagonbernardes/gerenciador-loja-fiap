@@ -37,7 +37,7 @@ def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False):
         if not produto_encontrado:
             print(f'\nProduto#{codigo_produto} não encontrado. Informe um código de produto existente')
 
-    quantidade_estocada = estoque.quantidade_estocada(produto_encontrado)
+    quantidade_estocada = estoque.obtenha_quantidade_estocada(produto_encontrado)
 
     if erro_estoque_vazio and quantidade_estocada == 0:
         raise ProdutoSemEstoqueException()

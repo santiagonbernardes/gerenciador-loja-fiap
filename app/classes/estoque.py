@@ -16,7 +16,7 @@ class Estoque:
     def atualizar(self, produto, nova_quantidade):
         self.execute_observando_limite_estoque_baixo(self.execute_atualizar, produto, nova_quantidade)
 
-    def quantidade_estocada(self, produto):
+    def obtenha_quantidade_estocada(self, produto):
         if produto.codigo not in self.produtos_estocados:
             raise ProdutoNaoEstocadoException()
         return self.produtos_estocados[produto.codigo]
@@ -31,9 +31,9 @@ class Estoque:
 
     def execute_observando_limite_estoque_baixo(self, funcao, *args):
         # Esta funcão executará a função passada como parâmetro e verificará se o estoque está baixo para notificar
-        # o usuário
+        # o usuário. O único requisito é que o primeiro parâmetro da função a ser executada seja o produto.
         funcao(*args)
-        produto = args[0]
+        produto = args[0]  # Produto tem que ser o primeiro parâmetro
         codigo_produto = produto.codigo
         if self.produtos_estocados[codigo_produto] < self.limite_estoque_baixo:
             self.mostre_mensagem_estoque_baixo(codigo_produto)
@@ -61,4 +61,5 @@ class Estoque:
         self.produtos_estocados[codigo_produto] = nova_quantidade
 
     def mostre_mensagem_estoque_baixo(self, codigo_produto):
-        print(f'Atenção: o produto#{codigo_produto} está com estoque baixo.')
+        estoque_atual = self.produtos_estocados[codigo_produto]
+        print(f'Atenção: o produto#{codigo_produto} está com estoque baixo. Estoque atual é: {estoque_atual}.')
