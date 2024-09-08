@@ -33,6 +33,37 @@ de estoque de produtos.
 
 ## Estrutura do Projeto
 
+- app/
+    - classes/
+        - produto.py: classes referentes a produtos
+        - estoque.py: classes referentes ao estoque
+        - conversor_de_input.py: classes referentes a conversão de input, expondo um dicionário que age como "factory".
+        - repositorio.py: define um repositório através de uma classe pai e implementa uma classe filha para salvar
+          dados em memória
+        - exibidor_de_produtos.py: classe que personaliza a exibição de produtos na linha de comando
+        - gerador_de_codigo.py: classe que gera códigos únicos para itens salvos no repositório
+    - excecoes.py: exceções personalizadas do sistema
+    - funcionalidades.py: funções principais do sistema, baseadas nos requisitos. utilizado a partir do gerenciador.py
+- Script principal que executa o gerenciador de loja, contendo o loop principal e a lógica de menu
+
 ## Requisitos para rodar o projeto
 
+- Python 3.10 ou superior; ou
+- Docker
+
 ## Rodando o projeto
+
+Os passos a seguir são obrigatórios em qualquer uma das opcões:
+
+1. Clone o repositório
+2. Acesse a pasta do projeto usando o terminal
+
+### Python
+
+3. Execute o comando `python gerenciador.py`
+4. Siga as instruções exibidas no terminal
+
+### Docker
+
+3. Execute o comando `docker run -it --rm -v $(pwd):/app -w /app python:3.10-slim sh -c "python gerenciador.py"`
+4. Siga as instruções exibidas no terminal
