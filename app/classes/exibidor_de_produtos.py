@@ -1,4 +1,5 @@
 from app.classes.estoque import Estoque
+from app.classes.produto import Produto
 from app.classes.repositorio import Repositorio
 from app.excecoes import NaoHaProdutosException
 
@@ -9,7 +10,7 @@ class ExibidorDeProdutos:
         self.estoque: Estoque = estoque
 
     def exiba_todos(self) -> None:
-        produtos = self.repositorio.listar()
+        produtos: list[Produto] = self.repositorio.listar()
 
         if len(produtos) == 0:
             raise NaoHaProdutosException()

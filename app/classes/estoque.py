@@ -20,9 +20,10 @@ class Estoque:
         self.execute_observando_limite_estoque_baixo(self.execute_atualizar, produto, nova_quantidade)
 
     def obtenha_quantidade_estocada(self, produto) -> int:
-        if produto.codigo not in self.produtos_estocados:
+        codigo_produto: int = produto.codigo
+        if codigo_produto not in self.produtos_estocados:
             raise ProdutoNaoEstocadoException()
-        return self.produtos_estocados[produto.codigo]
+        return self.produtos_estocados[codigo_produto]
 
     def atualize_limite_estoque_baixo(self, novo_limite) -> None:
         self.limite_estoque_baixo = novo_limite

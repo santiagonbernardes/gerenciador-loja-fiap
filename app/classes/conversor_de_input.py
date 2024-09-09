@@ -1,6 +1,6 @@
 class ConversorDeInput:
-    def __init__(self, texto_ao_usuario):
-        self.texto_ao_usuario = texto_ao_usuario
+    def __init__(self, texto_ao_usuario: str) -> None:
+        self.texto_ao_usuario: str = texto_ao_usuario
 
     def converta(self) -> str | int | float:
         while True:
@@ -13,13 +13,13 @@ class ConversorDeInput:
                 print('O dado que você digitou não é válido.')
 
     # Daqui pra baixo, tudo deveria ser privado ou protegido
-    def converta_para_o_tipo(self, entrada_do_usuario):
+    def converta_para_o_tipo(self, entrada_do_usuario) -> str | int | float:
         # Este método deve ser implementado pelas classes filhas para que o método converta funcione
         raise NotImplementedError('Você está chamando a classe errada, corrija seu código')
 
 
 class ConversorDeInputFloat(ConversorDeInput):
-    def __init__(self, texto_ao_usuario):
+    def __init__(self, texto_ao_usuario: str) -> None:
         super().__init__(texto_ao_usuario)
 
     def converta_para_o_tipo(self, entrada_do_usuario) -> float:
@@ -27,7 +27,7 @@ class ConversorDeInputFloat(ConversorDeInput):
 
 
 class ConversorDeInputInt(ConversorDeInput):
-    def __init__(self, texto_ao_usuario):
+    def __init__(self, texto_ao_usuario: str) -> None:
         super().__init__(texto_ao_usuario)
 
     def converta_para_o_tipo(self, entrada_do_usuario) -> int:
@@ -35,7 +35,7 @@ class ConversorDeInputInt(ConversorDeInput):
 
 
 class ConversorDeInputIntPositivo(ConversorDeInputInt):
-    def __init__(self, texto_ao_usuario):
+    def __init__(self, texto_ao_usuario: str) -> None:
         super().__init__(texto_ao_usuario)
 
     def converta_para_o_tipo(self, entrada_do_usuario) -> int:
@@ -47,7 +47,7 @@ class ConversorDeInputIntPositivo(ConversorDeInputInt):
 
 
 class ConversorDeInputFloatPositivo(ConversorDeInput):
-    def __init__(self, texto_ao_usuario):
+    def __init__(self, texto_ao_usuario: str) -> None:
         super().__init__(texto_ao_usuario)
 
     def converta_para_o_tipo(self, entrada_do_usuario) -> float:
@@ -59,7 +59,7 @@ class ConversorDeInputFloatPositivo(ConversorDeInput):
 
 
 class ConversorDeInputStringObrigatoria(ConversorDeInput):
-    def __init__(self, texto_ao_usuario):
+    def __init__(self, texto_ao_usuario: str) -> None:
         super().__init__(texto_ao_usuario)
 
     def converta_para_o_tipo(self, entrada_do_usuario) -> str:
