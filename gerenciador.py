@@ -4,11 +4,12 @@ from app.funcionalidades import crie_produto, adicione_ao_estoque, remova_do_est
     altere_alerta_estoque, obtenha_opcao_do_menu
 
 if __name__ == '__main__':
-    opcao = -1
+    opcao: int = -1
     print('Bem vindo ao gerenciador de loja de varejo da FIAP.\n')
     while opcao != 0:
         try:
             opcao = obtenha_opcao_do_menu()
+            print()
             if opcao == 0:
                 # Sair
                 print('Obrigado por usar o gerenciador de loja de varejo da FIAP.')

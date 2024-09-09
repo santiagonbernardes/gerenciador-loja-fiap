@@ -1,9 +1,9 @@
 class Produto:
 
-    def __init__(self, nome, categoria, preco, descricao, fornecedor):
-        self.nome = nome
-        self.categoria = categoria
-        self.preco = preco
-        self.descricao = descricao
-        self.fornecedor = fornecedor
-        self.codigo = None
+    def __init__(self, nome: str, categoria: str, preco: float, descricao: str, fornecedor: str):
+        self.nome: str = nome
+        self.categoria: str = categoria
+        self.preco: float = preco
+        self.descricao: str = descricao
+        self.fornecedor: str = fornecedor
+        self.codigo: int | None = None

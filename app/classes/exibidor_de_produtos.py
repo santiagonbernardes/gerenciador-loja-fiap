@@ -1,12 +1,14 @@
+from app.classes.estoque import Estoque
+from app.classes.repositorio import Repositorio
 from app.excecoes import NaoHaProdutosException
 
 
 class ExibidorDeProdutos:
-    def __init__(self, repositorio, estoque):
-        self.repositorio = repositorio
-        self.estoque = estoque
+    def __init__(self, repositorio: Repositorio, estoque: Estoque) -> None:
+        self.repositorio: Repositorio = repositorio
+        self.estoque: Estoque = estoque
 
-    def exiba_todos(self):
+    def exiba_todos(self) -> None:
         produtos = self.repositorio.listar()
 
         if len(produtos) == 0:
