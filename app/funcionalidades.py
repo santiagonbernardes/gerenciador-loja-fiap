@@ -11,7 +11,7 @@ estoque = Estoque()
 exibidor = ExibidorDeProdutos(repositorio, estoque)
 
 
-def obtenha_opcao_do_menu():
+def obtenha_opcao_do_menu() -> None:
     print()
     print('O que você deseja fazer?\n')
     print('1 - Criar um produto')
@@ -25,7 +25,7 @@ def obtenha_opcao_do_menu():
     return opcao_selecionada
 
 
-def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False):
+def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False) -> None:
     produto_encontrado = None
 
     while not produto_encontrado:
@@ -47,7 +47,7 @@ def obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=False):
     return produto_encontrado
 
 
-def crie_produto():
+def crie_produto() -> None:
     nome = conversores['str_obg']('Informe o nome do produto: ').converta()
     categoria = conversores['str_obg']('Informe a categoria do produto: ').converta()
     preco = conversores['float_pos']('Informe o preço do produto: ').converta()
@@ -61,14 +61,14 @@ def crie_produto():
     print(f'\nProduto#{produto.codigo} criado com sucesso!')
 
 
-def adicione_ao_estoque():
+def adicione_ao_estoque() -> None:
     produto = obtenha_produto(repositorio, estoque, exibidor)
     quantidade = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
     estoque.adicionar(produto, quantidade)
     print(f'\nQuantidade de {quantidade} adicionada ao estoque do produto#{produto.codigo}.')
 
 
-def remova_do_estoque():
+def remova_do_estoque() -> None:
     produto = obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=True)
     quantidade_remover = conversores['int_pos'](
         'Informe a quantidade a ser removida do estoque: ').converta()
@@ -76,14 +76,14 @@ def remova_do_estoque():
     print(f'\nQuantidade de {quantidade_remover} removida do estoque do produto#{produto.codigo}.')
 
 
-def ajuste_estoque_manualmente():
+def ajuste_estoque_manualmente() -> None:
     produto = obtenha_produto(repositorio, estoque, exibidor)
     nova_quantidade = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
     estoque.atualizar(produto, nova_quantidade)
     print(f'\nQuantidade do produto#{produto.codigo} atualizada para {nova_quantidade}.')
 
 
-def altere_alerta_estoque():
+def altere_alerta_estoque() -> None:
     alerta_original = estoque.limite_estoque_baixo
     print(f'O valor atual do alerta de estoque baixo é {alerta_original}.')
     novo_alerta = conversores['int_pos']('Informe o novo valor do alerta de estoque baixo: ').converta()
