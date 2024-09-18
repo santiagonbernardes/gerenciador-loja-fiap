@@ -1,7 +1,7 @@
 from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, \
     ProdutoNaoEstocadoException
 from app.funcionalidades import crie_produto, adicione_ao_estoque, remova_do_estoque, ajuste_estoque_manualmente, \
-    altere_alerta_estoque, obtenha_opcao_do_menu
+    altere_alerta_estoque, obtenha_opcao_do_menu, faca_venda
 
 if __name__ == '__main__':
     opcao: int = -1
@@ -28,6 +28,9 @@ if __name__ == '__main__':
             elif opcao == 5:
                 # Alterar alerta de estoque baixo
                 altere_alerta_estoque()
+            elif opcao == 6:
+                # Fazer uma venda
+                faca_venda()
             else:
                 print(f'Opção {opcao} inválida.')
         except NaoHaProdutosException:
