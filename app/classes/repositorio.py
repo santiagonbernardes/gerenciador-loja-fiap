@@ -7,7 +7,7 @@ class Repositorio:
         self.gerador_de_codigo = gerador_de_codigo
 
     def adicionar(self, produto: Produto) -> None:
-        produto.codigo = self.gerador_de_codigo.gerar()
+        produto.set_codigo(self.gerador_de_codigo.gerar())
         self.salve(produto)
 
     def obtenha(self, codigo) -> Produto:
