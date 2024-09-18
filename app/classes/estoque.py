@@ -1,27 +1,31 @@
+from typing import Callable, Any
+
+from app.classes.produto import Produto
 from app.excecoes import ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, ProdutoNaoEstocadoException
 
 
 class Estoque:
 
-    def __init__(self, limite_estoque_baixo=3):
-        self.produtos_estocados = {}
-        self.limite_estoque_baixo = limite_estoque_baixo
+    def __init__(self, limite_estoque_baixo: int = 3) -> None:
+        self.produtos_estocados: dict[int, int] = {}
+        self.limite_estoque_baixo: int = limite_estoque_baixo
 
-    def adicionar(self, produto, quantidade):
+    def adicionar(self, produto: Produto, quantidade: int) -> None:
         self.execute_observando_limite_estoque_baixo(self.execute_adicionar, produto, quantidade)
 
-    def remover(self, produto, quantidade_remover):
+    def remover(self, produto: Produto, quantidade_remover: int) -> None:
         self.execute_observando_limite_estoque_baixo(self.execute_remover, produto, quantidade_remover)
 
-    def atualizar(self, produto, nova_quantidade):
+    def atualizar(self, produto: Produto, nova_quantidade: int) -> None:
         self.execute_observando_limite_estoque_baixo(self.execute_atualizar, produto, nova_quantidade)
 
-    def obtenha_quantidade_estocada(self, produto):
-        if produto.codigo not in self.produtos_estocados:
+    def obtenha_quantidade_estocada(self, produto: Produto) -> int:
+        codigo_produto: int = produto.codigo
+        if codigo_produto not in self.produtos_estocados:
             raise ProdutoNaoEstocadoException()
-        return self.produtos_estocados[produto.codigo]
+        return self.produtos_estocados[codigo_produto]
 
-    def atualize_limite_estoque_baixo(self, novo_limite):
+    def atualize_limite_estoque_baixo(self, novo_limite: int) -> None:
         self.limite_estoque_baixo = novo_limite
         for codigo_produto, quantidade in self.produtos_estocados.items():
             if quantidade < novo_limite:
@@ -29,24 +33,24 @@ class Estoque:
 
     # Daqui pra baixo, tudo deveria ser privado
 
-    def execute_observando_limite_estoque_baixo(self, funcao, *args):
+    def execute_observando_limite_estoque_baixo(self, funcao: Callable, *args: Any) -> None:
         # Esta funcão executará a função passada como parâmetro e verificará se o estoque está baixo para notificar
         # o usuário. O único requisito é que o primeiro parâmetro da função a ser executada seja o produto.
         funcao(*args)
-        produto = args[0]  # Produto tem que ser o primeiro parâmetro
-        codigo_produto = produto.codigo
+        produto: Produto = args[0]  # Produto tem que ser o primeiro parâmetro
+        codigo_produto: int = produto.codigo
         if self.produtos_estocados[codigo_produto] < self.limite_estoque_baixo:
             self.mostre_mensagem_estoque_baixo(codigo_produto)
 
-    def execute_adicionar(self, produto, quantidade):
-        codigo_produto = produto.codigo
+    def execute_adicionar(self, produto: Produto, quantidade: int) -> None:
+        codigo_produto: int = produto.codigo
         if codigo_produto in self.produtos_estocados:
             self.produtos_estocados[codigo_produto] += quantidade
         else:
             self.execute_atualizar(produto, quantidade)
 
-    def execute_remover(self, produto, quantidade_remover):
-        codigo_produto = produto.codigo
+    def execute_remover(self, produto: Produto, quantidade_remover: int) -> None:
+        codigo_produto: int = produto.codigo
 
         if codigo_produto not in self.produtos_estocados:
             raise ProdutoSemEstoqueException()
@@ -56,10 +60,10 @@ class Estoque:
 
         self.produtos_estocados[codigo_produto] -= quantidade_remover
 
-    def execute_atualizar(self, produto, nova_quantidade):
-        codigo_produto = produto.codigo
+    def execute_atualizar(self, produto: Produto, nova_quantidade: int) -> None:
+        codigo_produto: int = produto.codigo
         self.produtos_estocados[codigo_produto] = nova_quantidade
 
-    def mostre_mensagem_estoque_baixo(self, codigo_produto):
-        estoque_atual = self.produtos_estocados[codigo_produto]
+    def mostre_mensagem_estoque_baixo(self, codigo_produto: int) -> None:
+        estoque_atual: int = self.produtos_estocados[codigo_produto]
         print(f'Atenção: o produto#{codigo_produto} está com estoque baixo. Estoque atual é: {estoque_atual}.')
