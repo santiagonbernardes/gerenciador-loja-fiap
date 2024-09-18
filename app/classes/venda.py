@@ -20,6 +20,12 @@ class Venda(Persistente):
         item_venda = ItemVenda(produto, quantidade)
         self.itens.append(item_venda)
 
+    def calcule_valor_total(self) -> float:
+        total: float = 0.0
+        for item_venda in self.itens:
+            total += item_venda.calcule_valor_total()
+        return total
+
 
 class ItemVenda:
     def __init__(self, produto: Produto, quantidade: int) -> None:

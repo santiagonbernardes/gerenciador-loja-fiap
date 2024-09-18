@@ -16,7 +16,8 @@ class ExibidorDeProdutos:
             raise NaoHaProdutosException()
 
         print('Produtos disponíveis:\n')
-        print('Código - Nome - Quantidade em estoque\n')
+        print('Código - Nome - Quantidade em estoque - Preço\n')
 
         for produto in produtos:
-            print(f'{produto.codigo} - {produto.nome} - {self.estoque.obtenha_quantidade_estocada(produto)}')
+            print(f'{produto.codigo} - {produto.nome} - '
+                  f'{self.estoque.obtenha_quantidade_estocada(produto)} - R$ {produto.preco}')
