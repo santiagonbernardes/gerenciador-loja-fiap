@@ -11,13 +11,13 @@ class Venda(Persistente):
         self.data: date = date.today()
         self.itens: list[ItemVenda] = []
 
-    def adicione_item(self, item: Produto, quantidade: int) -> None:
+    def adicione_item(self, produto: Produto, quantidade: int) -> None:
         for item_venda in self.itens:
-            if item_venda.codigo_produto == item.codigo:
+            if item_venda.codigo_produto == produto.codigo:
                 item_venda.quantidade += quantidade
                 return
 
-        item_venda = ItemVenda(item, quantidade)
+        item_venda = ItemVenda(produto, quantidade)
         self.itens.append(item_venda)
 
 

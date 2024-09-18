@@ -3,8 +3,8 @@ from app.classes.estoque import Estoque
 from app.classes.exibidor_de_produtos import ExibidorDeProdutos
 from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.produto import Produto
-from app.classes.venda import Venda
 from app.classes.repositorio import Repositorio, RepositorioEmMemoria
+from app.classes.venda import Venda
 from app.excecoes import ProdutoSemEstoqueException
 
 repositorio_produtos: Repositorio = RepositorioEmMemoria[Produto](GeradorDeCodigo())
@@ -94,28 +94,38 @@ def altere_alerta_estoque() -> None:
     estoque.atualize_limite_estoque_baixo(novo_alerta)
     print(f'Alerta de estoque baixo alterado de {alerta_original} para {novo_alerta}.')
 
+
+def obtenha_opcao_venda() -> int:
+    print()
+    print('Selecione 0 para finalizar a venda ou qualquer outro número positivo para continuar adicionando produtos.')
+    return conversores['int']('Escolha uma opção: ').converta()
+
+
 def faca_venda():
     opcao: int = -1
     venda: Venda = Venda()
     while opcao != 0:
         try:
-            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor)
+            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor, erro_estoque_vazio=True)
         except ProdutoSemEstoqueException:
             print('Produto sem unidades em estoque.')
+            opcao = obtenha_opcao_venda()
             continue
 
         quantidade_venda: int = conversores['int_pos']('Informe a quantidade a ser vendida: ').converta()
         if quantidade_venda > estoque.obtenha_quantidade_estocada(produto):
             print('O produto não possui esta quantidade em estoque.')
+            opcao = obtenha_opcao_venda()
             continue
 
         estoque.remover(produto, quantidade_venda)
         venda.adicione_item(produto, quantidade_venda)
 
-        print()
-        print('Selecione 0 para finalizar a venda ou qualquer outro número positivo para continuar adicionando produtos.')
-        opcao = conversores['int']('Escolha uma opção: ').converta()
+        opcao = obtenha_opcao_venda()
 
-    repositorio_vendas.adicionar(venda)
-    print(f'\nVenda#{venda.codigo} realizada com sucesso!')
-    # print(venda.emitir_relatorio())
+    if len(venda.itens) == 0:
+        print('Venda cancelada, nenhum item foi adicionado.')
+    else:
+        repositorio_vendas.adicionar(venda)
+        print(f'\nVenda#{venda.codigo} realizada com sucesso!')
+        # print(venda.emitir_relatorio())
