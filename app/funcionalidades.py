@@ -6,9 +6,9 @@ from app.classes.produto import Produto
 from app.classes.repositorio import Repositorio, RepositorioEmMemoria
 from app.excecoes import ProdutoSemEstoqueException
 
-repositorio: Repositorio = RepositorioEmMemoria(GeradorDeCodigo())
+repositorio_produtos: Repositorio = RepositorioEmMemoria[Produto](GeradorDeCodigo())
 estoque: Estoque = Estoque()
-exibidor: ExibidorDeProdutos = ExibidorDeProdutos(repositorio, estoque)
+exibidor: ExibidorDeProdutos = ExibidorDeProdutos(repositorio_produtos, estoque)
 
 
 def obtenha_opcao_do_menu() -> int:
@@ -56,21 +56,21 @@ def crie_produto() -> None:
     fornecedor: str = conversores['str_obg']('Informe o fornecedor do produto: ').converta()
 
     produto: Produto = Produto(nome, categoria, preco, descricao, fornecedor)
-    repositorio.adicionar(produto)
+    repositorio_produtos.adicionar(produto)
     estoque.adicionar(produto, 0)
 
     print(f'\nProduto#{produto.codigo} criado com sucesso!')
 
 
 def adicione_ao_estoque() -> None:
-    produto: Produto = obtenha_produto(repositorio, estoque, exibidor)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor)
     quantidade: int = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
     estoque.adicionar(produto, quantidade)
     print(f'\nQuantidade de {quantidade} adicionada ao estoque do produto#{produto.codigo}.')
 
 
 def remova_do_estoque() -> None:
-    produto: Produto = obtenha_produto(repositorio, estoque, exibidor, erro_estoque_vazio=True)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor, erro_estoque_vazio=True)
     quantidade_remover: int = conversores['int_pos'](
         'Informe a quantidade a ser removida do estoque: ').converta()
     estoque.remover(produto, quantidade_remover)
@@ -78,7 +78,7 @@ def remova_do_estoque() -> None:
 
 
 def ajuste_estoque_manualmente() -> None:
-    produto: Produto = obtenha_produto(repositorio, estoque, exibidor)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor)
     nova_quantidade: int = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
     estoque.atualizar(produto, nova_quantidade)
     print(f'\nQuantidade do produto#{produto.codigo} atualizada para {nova_quantidade}.')
