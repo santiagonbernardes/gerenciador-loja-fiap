@@ -1,9 +1,10 @@
 from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, \
     ProdutoNaoEstocadoException
 from app.funcionalidades import crie_produto, adicione_ao_estoque, remova_do_estoque, ajuste_estoque_manualmente, \
-    altere_alerta_estoque, obtenha_opcao_do_menu, faca_venda
+    altere_alerta_estoque, obtenha_opcao_do_menu, faca_venda, popule_banco
 
 if __name__ == '__main__':
+    popule_banco()
     opcao: int = -1
     print('Bem vindo ao gerenciador de loja de varejo da FIAP.\n')
     while opcao != 0:

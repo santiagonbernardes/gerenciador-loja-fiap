@@ -59,11 +59,17 @@ def crie_produto() -> None:
     descricao: str = conversores['str_obg']('Informe a descrição do produto: ').converta()
     fornecedor: str = conversores['str_obg']('Informe o fornecedor do produto: ').converta()
 
-    produto: Produto = Produto(nome, categoria, preco, descricao, fornecedor)
-    repositorio_produtos.adicionar(produto)
-    estoque.adicionar(produto, 0)
+    produto = crie_produto_com_estoque(categoria, descricao, fornecedor, nome, preco)
 
     print(f'\nProduto#{produto.codigo} criado com sucesso!')
+
+
+def crie_produto_com_estoque(categoria: str, descricao: str, fornecedor: str, nome: str, preco: float,
+                             quantidade: int = 0):
+    produto: Produto = Produto(nome, categoria, preco, descricao, fornecedor)
+    repositorio_produtos.adicionar(produto)
+    estoque.adicionar(produto, quantidade)
+    return produto
 
 
 def adicione_ao_estoque() -> None:
@@ -128,6 +134,27 @@ def faca_venda():
         print('Venda cancelada, nenhum item foi adicionado.')
     else:
         repositorio_vendas.adicionar(venda)
+        # Aqui é perguntado sobre o cupom
         print(f'\nVenda#{venda.codigo} realizada com sucesso!')
 
     print(GeradorDeRecibo(venda, repositorio_produtos).gerar_recibo())
+
+
+def popule_banco() -> None:
+    produtos = [
+        ("Apple iPhone 13", "Eletrônicos", 799.0, "Smartphone Apple iPhone 13 com 128GB", "Apple", 50),
+        ("Samsung Galaxy S21", "Eletrônicos", 699.0, "Smartphone Samsung Galaxy S21 com 128GB", "Samsung", 30),
+        ("Sony WH-1000XM4", "Acessórios", 349.0, "Fone de Ouvido Sony WH-1000XM4 c/ Cancelamento de Ruído", "Sony", 20),
+        ("Dell XPS 13", "Computadores", 999.0, "Notebook Dell XPS 13 com Intel i7 e 16GB RAM", "Dell", 10),
+        ("Apple MacBook Pro", "Computadores", 1299.0, "Notebook Apple MacBook Pro com M1 Chip", "Apple", 5),
+        ("Logitech MX Master 3", "Acessórios", 99.0, "Mouse Logitech MX Master 3", "Logitech", 8),
+        ("Amazon Echo Dot", "Casa Inteligente", 49.0, "Assistente Virtual Amazon Echo Dot 4ª Geração", "Amazon", 12),
+        ("Google Nest Hub", "Casa Inteligente", 89.0, "Assistente Virtual Google Nest Hub", "Google", 7),
+        ("Sony PlayStation 5", "Games", 499.0, "Console Sony PlayStation 5", "Sony", 3),
+        ("Microsoft Xbox Series X", "Games", 499.0, "Console Microsoft Xbox Series X", "Microsoft", 1),
+    ]
+
+    for nome, categoria, preco, descricao, fornecedor, quantidade in produtos:
+        crie_produto_com_estoque(categoria, descricao, fornecedor, nome, preco, quantidade)
+
+    print("Banco de dados populado com 10 produtos.")
