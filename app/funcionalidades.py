@@ -29,6 +29,7 @@ def obtenha_opcao_do_menu() -> int:
     print(f'5 - Alterar alerta de estoque baixo (valor atual: {estoque.limite_estoque_baixo})')
     print('6 - Fazer uma venda')
     print('7 - Listar cupons')
+    print('8 - Criar um cupom')
     print('0 - Sair')
     return conversores['int']('Escolha uma opção: ').converta()
 
@@ -119,7 +120,8 @@ def faca_venda():
     venda: Venda = Venda()
     while opcao != 0:
         try:
-            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos, erro_estoque_vazio=True)
+            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos,
+                                               erro_estoque_vazio=True)
         except ProdutoSemEstoqueException:
             print('Produto sem unidades em estoque.')
             opcao = obtenha_opcao_venda()
@@ -145,8 +147,24 @@ def faca_venda():
 
     print(GeradorDeRecibo(venda, repositorio_produtos).gerar_recibo())
 
+
 def liste_cupons() -> None:
     exibidor_de_cupons.exiba_todos()
+
+
+def crie_cupom() -> None:
+    nome: str = conversores['str_obg']('Informe o nome: ').converta()
+    descricao: str = conversores['str_obg']('Informe a descrição: ').converta()
+    porcentagem_desconto: float = conversores['float_pos']('Informe a porcentagem de desconto do cupom: ').converta()
+
+    for cupom_ja_criado in repositorio_cupons.listar():
+        if cupom_ja_criado.eh_valido(nome):
+            print(f'\nCupom com o identificador {nome} já existe.')
+            return
+
+    cupom: Cupom = Cupom(nome, descricao, porcentagem_desconto)
+    repositorio_cupons.adicionar(cupom)
+    print(f'\nCupom#{cupom.codigo} criado com sucesso!')
 
 
 def popule_banco() -> None:

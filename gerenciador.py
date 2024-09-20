@@ -1,7 +1,7 @@
 from app.excecoes import NaoHaProdutosException, ProdutoSemEstoqueException, RemocaoMaiorQueEstoqueException, \
     ProdutoNaoEstocadoException, NaoHaCuponsException
 from app.funcionalidades import crie_produto, adicione_ao_estoque, remova_do_estoque, ajuste_estoque_manualmente, \
-    altere_alerta_estoque, obtenha_opcao_do_menu, faca_venda, popule_banco, liste_cupons
+    altere_alerta_estoque, obtenha_opcao_do_menu, faca_venda, popule_banco, liste_cupons, crie_cupom
 
 if __name__ == '__main__':
     popule_banco()
@@ -35,6 +35,9 @@ if __name__ == '__main__':
             elif opcao == 7:
                 # Lista cupons
                 liste_cupons()
+            elif opcao == 8:
+                # Cria cupom
+                crie_cupom()
             else:
                 print(f'Opção {opcao} inválida.')
         except NaoHaProdutosException:
