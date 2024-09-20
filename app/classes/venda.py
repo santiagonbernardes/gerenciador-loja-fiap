@@ -1,5 +1,6 @@
 from datetime import date
 
+from app.classes.cupom import Cupom
 from app.classes.persistente import Persistente
 from app.classes.produto import Produto
 
@@ -10,6 +11,7 @@ class Venda(Persistente):
         super().__init__()
         self.data: date = date.today()
         self.itens: list[ItemVenda] = []
+        self.cupom: Cupom | None = None
 
     def adicione_item(self, produto: Produto, quantidade: int) -> None:
         for item_venda in self.itens:
@@ -20,11 +22,18 @@ class Venda(Persistente):
         item_venda = ItemVenda(produto, quantidade)
         self.itens.append(item_venda)
 
-    def calcule_valor_total(self) -> float:
-        total: float = 0.0
+    def calcule_subtotal(self) -> float:
+        subtotal: float = 0.0
         for item_venda in self.itens:
-            total += item_venda.calcule_valor_total()
-        return total
+            subtotal += item_venda.calcule_valor_total()
+        return subtotal
+
+    def calcule_valor_total(self) -> float:
+        if not self.cupom:
+            return self.calcule_subtotal()
+
+        subtotal: float = self.calcule_subtotal()
+        return subtotal - (subtotal * self.cupom.porcentagem_desconto / 100)
 
 
 class ItemVenda:

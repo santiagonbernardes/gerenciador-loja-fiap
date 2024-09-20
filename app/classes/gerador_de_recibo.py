@@ -11,11 +11,23 @@ class GeradorDeRecibo:
         self.repositorio_de_produtos: Repositorio[Produto] = repositorio_de_produtos
         self.headers_recibo: list[str] = ['Recibo da Venda #', 'Data da Venda']
         self.headers_itens: list[str] = ['Código', 'Nome', 'Quantidade', 'Valor Unitário', 'Valor Total']
+        self.headers_rodape = ['Subtotal', 'Cupom Aplicado', '% de desconto', 'Valor Total da Venda']
 
     def gerar_recibo(self) -> str:
-        cabecalho = tabulate([[self.venda.codigo, self.venda.data]], headers=self.headers_recibo, tablefmt='grid')
+        if self.venda.cupom:
+            nome_cupom = self.venda.cupom.nome
+            porcentagem_desconto = self.venda.cupom.porcentagem_desconto
+        else:
+            nome_cupom = 'Sem cupom'
+            porcentagem_desconto = 0
+
+        dados_cabecalho = [self.venda.codigo, self.venda.data]
+        dados_rodape = [self.venda.calcule_subtotal(), nome_cupom, f'{porcentagem_desconto}%',
+                        f'R${self.venda.calcule_valor_total()}']
+
+        cabecalho = tabulate([dados_cabecalho], headers=self.headers_recibo, tablefmt='grid')
         itens = self.gere_itens()
-        rodape = tabulate([[self.venda.calcule_valor_total()]], headers=['Valor Total da Venda'], tablefmt='grid')
+        rodape = tabulate([dados_rodape], headers=self.headers_rodape, tablefmt='grid')
         return f'{cabecalho}{itens}{rodape}'
 
     def gere_itens(self) -> str:
@@ -27,8 +39,8 @@ class GeradorDeRecibo:
                 produto.codigo,
                 produto.nome,
                 item_venda.quantidade,
-                item_venda.valor_unitario,
-                item_venda.calcule_valor_total()
+                f'R${item_venda.valor_unitario}',
+                f'R${item_venda.calcule_valor_total()}'
             ]
             dados_itens.append(dados)
 

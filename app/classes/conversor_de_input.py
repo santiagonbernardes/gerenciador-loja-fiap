@@ -69,11 +69,25 @@ class ConversorDeInputStringObrigatoria(ConversorDeInput):
         return str(entrada_do_usuario)
 
 
+class ConversorDeInputStringSOuN(ConversorDeInput):
+    def __init__(self, texto_ao_usuario: str) -> None:
+        super().__init__(texto_ao_usuario)
+
+    def converta_para_o_tipo(self, entrada_do_usuario: str) -> str:
+        entrada_minuscula = entrada_do_usuario.lower()
+
+        if entrada_minuscula == 's' or entrada_minuscula == 'n':
+            return entrada_minuscula
+
+        raise Exception('Valor inválido. Digite "s" para sim ou "n" para não.')
+
+
 # Conversores é uma "factory" (padrão de projeto) de conversores de input
 conversores: dict[str, [ConversorDeInput]] = {
     'int': ConversorDeInputInt,
     'float': ConversorDeInputFloat,
     'int_pos': ConversorDeInputIntPositivo,
     'float_pos': ConversorDeInputFloatPositivo,
-    'str_obg': ConversorDeInputStringObrigatoria
+    'str_obg': ConversorDeInputStringObrigatoria,
+    'str_s_n': ConversorDeInputStringSOuN
 }

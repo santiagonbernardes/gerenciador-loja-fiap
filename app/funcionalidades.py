@@ -141,8 +141,27 @@ def faca_venda():
     if len(venda.itens) == 0:
         print('Venda cancelada, nenhum item foi adicionado.')
     else:
+        opcao_aplicar_cupom: str = conversores['str_s_n']('Deseja aplicar um cupom (s/n)? ').converta()
+        if opcao_aplicar_cupom == 's':
+            opcao_cupom: str = ""
+            while opcao_cupom.lower() != "sair":
+                opcao_cupom = conversores['str_obg']('Informe o nome do cupom ou "SAIR" para finalizar: ').converta()
+                if opcao_cupom.lower() == "sair":
+                    print(f'Saindo da aplicação de cupons.')
+                else:
+                    cupom: Cupom | None = None
+                    for cupom_armazenado in repositorio_cupons.listar():
+                        if cupom_armazenado.eh_valido(opcao_cupom):
+                            cupom = cupom_armazenado
+
+                    if cupom:
+                        venda.cupom = cupom
+                        print(f'Cupom {cupom.nome} aplicado com sucesso!')
+                        break
+                    else:
+                        print(f'Cupom {opcao_cupom} não encontrado. Tente novamente')
+
         repositorio_vendas.adicionar(venda)
-        # Aqui é perguntado sobre o cupom
         print(f'\nVenda#{venda.codigo} realizada com sucesso!')
 
     print(GeradorDeRecibo(venda, repositorio_produtos).gerar_recibo())
