@@ -12,7 +12,7 @@ class ExibidorDeProdutos:
         self.estoque: Estoque = estoque
         self.headers: list[str] = ['Código', 'Nome', 'Quantidade em estoque', 'Preço']
 
-    def exiba_todos(self) -> None:
+    def exiba_todos(self, mostra_produtos_disponiveis: bool = True) -> None:
         produtos: list[Produto] = self.repositorio.listar()
 
         if len(produtos) == 0:
@@ -25,5 +25,7 @@ class ExibidorDeProdutos:
                      f'R${produto.preco}']
             dados_produtos.append(dados)
 
-        print('Produtos disponíveis:\n')
+        if mostra_produtos_disponiveis:
+            print('Produtos disponíveis:\n')
+
         print(tabulate(dados_produtos, headers=self.headers, tablefmt='pretty'))

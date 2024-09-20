@@ -3,8 +3,8 @@ from app.classes.cupom import Cupom
 from app.classes.estoque import Estoque
 from app.classes.exibidor_de_cupons import ExibidorDeCupons
 from app.classes.exibidor_de_produtos import ExibidorDeProdutos
-from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.exibidor_de_venda import ExibidorDeVenda
+from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.produto import Produto
 from app.classes.repositorio import Repositorio, RepositorioEmMemoria
 from app.classes.venda import Venda
@@ -31,6 +31,7 @@ def obtenha_opcao_do_menu() -> int:
     print('7 - Listar cupons')
     print('8 - Criar um cupom')
     print('9 - Emitir relatório de vendas')
+    print('10 - Emitir relatório do estoque')
     print('0 - Sair')
     return conversores['int']('Escolha uma opção: ').converta()
 
@@ -187,6 +188,7 @@ def crie_cupom() -> None:
     repositorio_cupons.adicionar(cupom)
     print(f'\nCupom#{cupom.codigo} criado com sucesso!')
 
+
 def emite_relatorio_vendas() -> None:
     vendas = repositorio_vendas.listar()
     if len(vendas) == 0:
@@ -196,6 +198,11 @@ def emite_relatorio_vendas() -> None:
     print('\nRelatório de vendas:\n')
     for venda in vendas:
         print(ExibidorDeVenda(venda, repositorio_produtos).exiba_todos())
+
+
+def emite_relatorio_estoque() -> None:
+    print('\nRelatório de estoque:\n')
+    print(exibidor_de_produtos.exiba_todos(mostra_produtos_disponiveis=False))
 
 
 def popule_banco() -> None:
