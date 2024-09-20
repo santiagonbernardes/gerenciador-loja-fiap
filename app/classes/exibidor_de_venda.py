@@ -5,15 +5,15 @@ from app.classes.repositorio import Repositorio
 from app.classes.venda import Venda
 
 
-class GeradorDeRecibo:
+class ExibidorDeVenda:
     def __init__(self, venda: Venda, repositorio_de_produtos: Repositorio[Produto]) -> None:
         self.venda: Venda = venda
         self.repositorio_de_produtos: Repositorio[Produto] = repositorio_de_produtos
-        self.headers_recibo: list[str] = ['Recibo da Venda #', 'Data da Venda']
+        self.headers_recibo: list[str] = ['Código da Venda #', 'Data da Venda']
         self.headers_itens: list[str] = ['Código', 'Nome', 'Quantidade', 'Valor Unitário', 'Valor Total']
         self.headers_rodape = ['Subtotal', 'Cupom Aplicado', '% de desconto', 'Valor Total da Venda']
 
-    def gerar_recibo(self) -> str:
+    def exiba_todos(self) -> str:
         if self.venda.cupom:
             nome_cupom = self.venda.cupom.nome
             porcentagem_desconto = self.venda.cupom.porcentagem_desconto
