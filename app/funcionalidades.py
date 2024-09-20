@@ -1,5 +1,7 @@
 from app.classes.conversor_de_input import conversores
+from app.classes.cupom import Cupom
 from app.classes.estoque import Estoque
+from app.classes.exibidor_de_cupons import ExibidorDeCupons
 from app.classes.exibidor_de_produtos import ExibidorDeProdutos
 from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.gerador_de_recibo import GeradorDeRecibo
@@ -8,10 +10,13 @@ from app.classes.repositorio import Repositorio, RepositorioEmMemoria
 from app.classes.venda import Venda
 from app.excecoes import ProdutoSemEstoqueException
 
-repositorio_produtos: Repositorio = RepositorioEmMemoria[Produto](GeradorDeCodigo())
-repositorio_vendas: Repositorio = RepositorioEmMemoria[Venda](GeradorDeCodigo())
+gerador: GeradorDeCodigo = GeradorDeCodigo()
+repositorio_produtos: Repositorio = RepositorioEmMemoria[Produto](gerador)
+repositorio_vendas: Repositorio = RepositorioEmMemoria[Venda](gerador)
+repositorio_cupons: Repositorio = RepositorioEmMemoria[Cupom](gerador)
 estoque: Estoque = Estoque()
-exibidor: ExibidorDeProdutos = ExibidorDeProdutos(repositorio_produtos, estoque)
+exibidor_de_produtos: ExibidorDeProdutos = ExibidorDeProdutos(repositorio_produtos, estoque)
+exibidor_de_cupons: ExibidorDeCupons = ExibidorDeCupons(repositorio_cupons)
 
 
 def obtenha_opcao_do_menu() -> int:
@@ -23,6 +28,7 @@ def obtenha_opcao_do_menu() -> int:
     print('4 - Ajustar manualmente a quantidade de um produto no estoque')
     print(f'5 - Alterar alerta de estoque baixo (valor atual: {estoque.limite_estoque_baixo})')
     print('6 - Fazer uma venda')
+    print('7 - Listar cupons')
     print('0 - Sair')
     return conversores['int']('Escolha uma opção: ').converta()
 
@@ -73,14 +79,14 @@ def crie_produto_com_estoque(categoria: str, descricao: str, fornecedor: str, no
 
 
 def adicione_ao_estoque() -> None:
-    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos)
     quantidade: int = conversores['int_pos']('Informe a quantidade a ser adicionada ao estoque: ').converta()
     estoque.adicionar(produto, quantidade)
     print(f'\nQuantidade de {quantidade} adicionada ao estoque do produto#{produto.codigo}.')
 
 
 def remova_do_estoque() -> None:
-    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor, erro_estoque_vazio=True)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos, erro_estoque_vazio=True)
     quantidade_remover: int = conversores['int_pos'](
         'Informe a quantidade a ser removida do estoque: ').converta()
     estoque.remover(produto, quantidade_remover)
@@ -88,7 +94,7 @@ def remova_do_estoque() -> None:
 
 
 def ajuste_estoque_manualmente() -> None:
-    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor)
+    produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos)
     nova_quantidade: int = conversores['int_pos']('Informe a nova quantidade do produto no estoque: ').converta()
     estoque.atualizar(produto, nova_quantidade)
     print(f'\nQuantidade do produto#{produto.codigo} atualizada para {nova_quantidade}.')
@@ -113,7 +119,7 @@ def faca_venda():
     venda: Venda = Venda()
     while opcao != 0:
         try:
-            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor, erro_estoque_vazio=True)
+            produto: Produto = obtenha_produto(repositorio_produtos, estoque, exibidor_de_produtos, erro_estoque_vazio=True)
         except ProdutoSemEstoqueException:
             print('Produto sem unidades em estoque.')
             opcao = obtenha_opcao_venda()
@@ -139,6 +145,9 @@ def faca_venda():
 
     print(GeradorDeRecibo(venda, repositorio_produtos).gerar_recibo())
 
+def liste_cupons() -> None:
+    exibidor_de_cupons.exiba_todos()
+
 
 def popule_banco() -> None:
     produtos = [
@@ -157,4 +166,15 @@ def popule_banco() -> None:
     for nome, categoria, preco, descricao, fornecedor, quantidade in produtos:
         crie_produto_com_estoque(categoria, descricao, fornecedor, nome, preco, quantidade)
 
-    print("Banco de dados populado com 10 produtos.")
+    cupons = [
+        ("ESSEVALE10", "Desconto de 10%", 10.0),
+        ("PYTHON", "Desconto de 20%", 20.0),
+        ("FIAP", "Desconto de 30%", 30.0),
+        ("DESC40", "Desconto de 40%", 40.0),
+        ("FICOUDOIDO", "Desconto de 50%", 50.0),
+    ]
+
+    for descricao, identificador, porcentagem_desconto in cupons:
+        repositorio_cupons.adicionar(Cupom(descricao, identificador, porcentagem_desconto))
+
+    print("Banco de dados populado com 10 produtos e 5 cupons.")
