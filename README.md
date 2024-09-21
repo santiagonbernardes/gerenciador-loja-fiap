@@ -30,6 +30,18 @@ de estoque de produtos.
     - Atualização de Estoque: Possibilidade de ajustar manualmente a quantidade de produtos.
     - Alerta de Estoque Baixo: Sistema de notificação quando a quantidade de um produto atinge um nível mínimo
       predefinido.
+3. Vendas
+    - Registro de Vendas: Função para registrar a venda de produtos.
+    - Atualização Automática do Estoque: Ao registrar uma venda, a quantidade em estoque deve ser automaticamente
+      reduzida.
+    - Emissão de Recibo: Geração de um recibo ou nota fiscal após a venda.
+    - Descontos e Promoções: Função para aplicar descontos específicos ou promoções a produtos.
+
+4. Relatórios
+    - Relatório de Vendas: Relatório detalhado das vendas realizadas, incluindo data, produtos vendidos, quantidade e
+      valor total.
+    - Relatório de Estoque: Visualização da quantidade atual de todos os produtos no estoque.
+    - Histórico de Movimentações: Registro de todas as adições e remoções de estoque.
 
 ## Estrutura do Projeto
 
@@ -42,6 +54,12 @@ de estoque de produtos.
           dados em memória
         - exibidor_de_produtos.py: classe que personaliza a exibição de produtos na linha de comando
         - gerador_de_codigo.py: classe que gera códigos únicos para itens salvos no repositório
+        - cupom.py: classe que que modela um cupom
+        - venda.py: classe que modela uma venda
+        - exibidor_de_vendas.py: classe que personaliza a exibição de vendas na linha de comando
+        - exibidor_de_cupons.py: classe que personaliza a exibição de cupons na linha de comando
+        - persistente.py: define a superclasse de um objeto que pode ser persistido
+        - rastreador.py: classe que rastreia a movimentação no estoque
     - excecoes.py: exceções personalizadas do sistema
     - funcionalidades.py: funções principais do sistema, baseadas nos requisitos. utilizado a partir do gerenciador.py
 - Script principal que executa o gerenciador de loja, contendo o loop principal e a lógica de menu
@@ -60,10 +78,16 @@ Os passos a seguir são obrigatórios em qualquer uma das opcões:
 
 ### Python
 
-3. Execute o comando `python gerenciador.py`
-4. Siga as instruções exibidas no terminal
+3. Instale o venv com o comando `python -m pip install venv`
+4. Crie um ambiente virtual com o comando `python -m venv .venv`
+5. Ative o ambiente virtual com o comando `source .venv/bin/activate` (Linux) ou `.venv\Scripts\activate` (Windows)
+6. Instale as dependências com o comando `python -m pip install -r requirements.txt`
+7. Execute o comando `python gerenciador.py`
+8. Siga as instruções exibidas no terminal
 
 ### Docker
 
-3. Execute o comando `docker run -it --rm -v $(pwd):/app -w /app python:3.10-slim sh -c "python gerenciador.py"`
-4. Siga as instruções exibidas no terminal
+3. Faça a build do projeto: `docker build -t gerenciador-loja .` (este comando deve ser rodado apenas uma vez ou quando
+   você mudar o código)
+4. Execute o comando `docker run -it --rm gerenciador-loja`
+5. Siga as instruções exibidas no terminal

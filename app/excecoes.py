@@ -12,3 +12,6 @@ class RemocaoMaiorQueEstoqueException(Exception):
 
 class ProdutoNaoEstocadoException(Exception):
     pass
+
+class NaoHaCuponsException(Exception):
+    pass

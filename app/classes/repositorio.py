@@ -1,39 +1,43 @@
+from typing import TypeVar, Generic
+
 from app.classes.gerador_de_codigo import GeradorDeCodigo
-from app.classes.produto import Produto
+from app.classes.persistente import Persistente
+
+T = TypeVar('T', bound=Persistente)
 
 
-class Repositorio:
+class Repositorio(Generic[T]):
     def __init__(self, gerador_de_codigo: GeradorDeCodigo) -> None:
         self.gerador_de_codigo = gerador_de_codigo
 
-    def adicionar(self, produto: Produto) -> None:
-        produto.codigo = self.gerador_de_codigo.gerar()
-        self.salve(produto)
+    def adicionar(self, item: T) -> None:
+        item.set_codigo(self.gerador_de_codigo.gerar())
+        self.salve(item)
 
-    def obtenha(self, codigo) -> Produto:
+    def obtenha(self, codigo: int) -> T:
         raise NotImplementedError('Você está chamando a super classe, corrija seu código')
 
-    def listar(self) -> list[Produto]:
+    def listar(self) -> list[T]:
         raise NotImplementedError('Você está chamando a super classe, corrija seu código')
 
     # Daqui pra baixo, tudo deveria ser privado ou protegido
-    def salve(self, produto) -> None:
+    def salve(self, item: T) -> None:
         raise NotImplementedError('Você está chamando a super classe, corrija seu código')
 
 
-class RepositorioEmMemoria(Repositorio):
+class RepositorioEmMemoria(Repositorio[T]):
     def __init__(self, gerador_de_codigo: GeradorDeCodigo) -> None:
         super().__init__(gerador_de_codigo)
-        self.produtos: list[Produto] = []
+        self.itens: list[T] = []
 
-    def obtenha(self, codigo) -> Produto | None:
-        for produto in self.produtos:
-            if produto.codigo == codigo:
-                return produto
+    def obtenha(self, codigo: int) -> T | None:
+        for item in self.itens:
+            if item.codigo == codigo:
+                return item
         return None
 
-    def listar(self) -> list[Produto]:
-        return self.produtos
+    def listar(self) -> list[T]:
+        return self.itens
 
-    def salve(self, produto) -> None:
-        self.produtos.append(produto)
+    def salve(self, item: T) -> None:
+        self.itens.append(item)
