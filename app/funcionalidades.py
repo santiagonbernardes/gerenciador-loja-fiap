@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 from app.classes.conversor_de_input import conversores
 from app.classes.cupom import Cupom
 from app.classes.estoque import Estoque
@@ -6,6 +8,7 @@ from app.classes.exibidor_de_produtos import ExibidorDeProdutos
 from app.classes.exibidor_de_venda import ExibidorDeVenda
 from app.classes.gerador_de_codigo import GeradorDeCodigo
 from app.classes.produto import Produto
+from app.classes.rastreador import Evento, Rastreador
 from app.classes.repositorio import Repositorio, RepositorioEmMemoria
 from app.classes.venda import Venda
 from app.excecoes import ProdutoSemEstoqueException
@@ -14,7 +17,9 @@ gerador: GeradorDeCodigo = GeradorDeCodigo()
 repositorio_produtos: Repositorio = RepositorioEmMemoria[Produto](gerador)
 repositorio_vendas: Repositorio = RepositorioEmMemoria[Venda](gerador)
 repositorio_cupons: Repositorio = RepositorioEmMemoria[Cupom](gerador)
-estoque: Estoque = Estoque()
+repositorio_eventos: Repositorio = RepositorioEmMemoria[Evento](gerador)
+rastrador: Rastreador = Rastreador(repositorio_eventos)
+estoque: Estoque = Estoque(rastrador)
 exibidor_de_produtos: ExibidorDeProdutos = ExibidorDeProdutos(repositorio_produtos, estoque)
 exibidor_de_cupons: ExibidorDeCupons = ExibidorDeCupons(repositorio_cupons)
 
@@ -32,6 +37,7 @@ def obtenha_opcao_do_menu() -> int:
     print('8 - Criar um cupom')
     print('9 - Emitir relatório de vendas')
     print('10 - Emitir relatório do estoque')
+    print('11 - Exibe relatório de movimentacão do estoque')
     print('0 - Sair')
     return conversores['int']('Escolha uma opção: ').converta()
 
@@ -203,6 +209,17 @@ def emite_relatorio_vendas() -> None:
 def emite_relatorio_estoque() -> None:
     print('\nRelatório de estoque:\n')
     print(exibidor_de_produtos.exiba_todos(mostra_produtos_disponiveis=False))
+
+
+def emite_relatorio_movimentacao_estoque() -> None:
+    dados = []
+    for evento in repositorio_eventos.listar():
+        dados.append([evento.data, evento.evento, evento.codigo_produto, evento.quantidade_original,
+                      evento.quantidade_entrada, evento.quantidade_atualizada])
+    headers = ['Data', 'Evento', 'Código Produto', 'Quantidade Original', 'Quantidade modificada',
+               'Quantidade Atualizada']
+    print('\nRelatório de movimentação de estoque:\n')
+    print(tabulate(dados, headers=headers, tablefmt='pretty'))
 
 
 def popule_banco() -> None:
